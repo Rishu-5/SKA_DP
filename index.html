@@ -265,7 +265,37 @@
         canvas.addEventListener('mouseleave', () => {
             isDragging = false;
         });
+// **Capture Photo from Camera**
+captureBtn.addEventListener('click', async () => {
+    // Request access to the camera
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        video.srcObject = stream;
+        video.style.display = 'block';  // Show the video feed
+        captureBtn.textContent = 'Take Photo';  // Change button text to "Take Photo"
 
+        captureBtn.onclick = () => {
+            // Capture the photo from the video stream
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = video.videoWidth;
+            tempCanvas.height = video.videoHeight;
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
+
+            const guestImage = new Image();
+            guestImage.onload = () => {
+                drawImageWithFrame(guestImage);  // Crop and draw the image with the frame
+            };
+            guestImage.src = tempCanvas.toDataURL('image/png');
+
+            // Stop the video stream after taking the photo
+            const tracks = video.srcObject.getTracks();
+            tracks.forEach(track => track.stop());
+            video.style.display = 'none';  // Hide the video feed
+            captureBtn.textContent = 'Capture Photo with Camera';  // Reset button text
+        };
+    }
+});
         // Download functionality
         downloadBtn.addEventListener('click', () => {
             const link = document.createElement('a');
