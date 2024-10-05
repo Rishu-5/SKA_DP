@@ -122,15 +122,14 @@
     </style>
 </head>
 <body>
-    <h1>Get your customized profile photo and show your support for CA Agarwal Sanjay Kumar — Ballot No. 1 for Central Council of ICAI</h1>
+    <h1>Get your customized profile photo and show your support for CA Sanjay Agarwal — Ballot No. 1 for Central Council of ICAI</h1>
 
     <div class="container">
-        <!-- Buttons to either upload or capture photo -->    
+        <!-- Buttons to either upload or capture photo -->
         <div class="buttons">
             <input type="file" id="uploadPhoto" accept="image/*">
-		<button id="captureBtn">Capture Photo with Camera</button>
         </div>
-        <video id="video" width="400" height="300" autoplay style="display:none;"></video>
+        
         <canvas id="photoCanvas"></canvas>
         
         <!-- Zoom In and Zoom Out buttons placed above the download button -->
@@ -138,13 +137,15 @@
             <button id="zoomInBtn">Zoom In</button>
             <button id="zoomOutBtn">Zoom Out</button>
         </div>
-<!-- Footer with tagline -->
-    	<footer>
-        <p><span>Transparency. Growth. Innovation.</span></p>
-    	</footer>
+
         <br>
         <button id="downloadBtn" disabled>Download Photo</button>
     </div>
+
+	<!-- Footer with tagline -->
+    	<footer>
+        <p><span>Transparency. Growth. Innovation.</span></p>
+    	</footer>
 
     <script>
         const uploadPhoto = document.getElementById('uploadPhoto');
@@ -153,8 +154,7 @@
         const downloadBtn = document.getElementById('downloadBtn');
         const zoomInBtn = document.getElementById('zoomInBtn');
         const zoomOutBtn = document.getElementById('zoomOutBtn');
-        const video = document.getElementById('video');
-    	const captureBtn = document.getElementById('captureBtn');
+        
         let frameImage = new Image();
         frameImage.src = 'frame.png';  // Path to your frame
 
@@ -228,37 +228,6 @@
             };
             reader.readAsDataURL(e.target.files[0]);
         });
-// **Capture Photo from Camera**
-captureBtn.addEventListener('click', async () => {
-    // Request access to the camera
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        video.srcObject = stream;
-        video.style.display = 'block';  // Show the video feed
-        captureBtn.textContent = 'Take Photo';  // Change button text to "Take Photo"
-
-        captureBtn.onclick = () => {
-            // Capture the photo from the video stream
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = video.videoWidth;
-            tempCanvas.height = video.videoHeight;
-            const tempCtx = tempCanvas.getContext('2d');
-            tempCtx.drawImage(video, 0, 0, tempCanvas.width, tempCanvas.height);
-
-            const guestImage = new Image();
-            guestImage.onload = () => {
-                drawImageWithFrame(guestImage);  // Crop and draw the image with the frame
-            };
-            guestImage.src = tempCanvas.toDataURL('image/png');
-
-            // Stop the video stream after taking the photo
-            const tracks = video.srcObject.getTracks();
-            tracks.forEach(track => track.stop());
-            video.style.display = 'none';  // Hide the video feed
-            captureBtn.textContent = 'Capture Photo with Camera';  // Reset button text
-        };
-    }
-});
 
         // Zoom In and Zoom Out functionality
         zoomInBtn.addEventListener('click', () => {
@@ -297,6 +266,7 @@ captureBtn.addEventListener('click', async () => {
         canvas.addEventListener('mouseleave', () => {
             isDragging = false;
         });
+
         // Download functionality
         downloadBtn.addEventListener('click', () => {
             const link = document.createElement('a');
