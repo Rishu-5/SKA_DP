@@ -125,11 +125,12 @@
     <h1>Get your customized profile photo and show your support for CA Agarwal Sanjay Kumar — Ballot No. 1 for Central Council of ICAI</h1>
 
     <div class="container">
-        <!-- Buttons to either upload or capture photo -->
+        <!-- Buttons to either upload or capture photo -->    
         <div class="buttons">
             <input type="file" id="uploadPhoto" accept="image/*">
+		<button id="captureBtn">Capture Photo with Camera</button>
         </div>
-        
+        <video id="video" width="400" height="300" autoplay style="display:none;"></video>
         <canvas id="photoCanvas"></canvas>
         
         <!-- Zoom In and Zoom Out buttons placed above the download button -->
